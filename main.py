@@ -1,9 +1,17 @@
+from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-app = FastAPI()
+from infra.database import create_db_and_tables
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_db_and_tables()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +24,8 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return "Hello World!"
+
+
 
 class LoginRequestDto(BaseModel):
     email: str
