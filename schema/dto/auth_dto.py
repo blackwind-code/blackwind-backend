@@ -1,3 +1,4 @@
+import uuid
 from pydantic import BaseModel
 
 class LoginRequestDto(BaseModel):
@@ -5,4 +6,21 @@ class LoginRequestDto(BaseModel):
     password: str
 
 class LoginResponseDto(BaseModel):
-    success: bool
+    id: uuid.UUID
+    username: str
+    email: str
+    student_id: str
+    department: str
+
+class RegisterRequestDto(BaseModel):
+    username: str
+    email: str
+    password: str
+    student_id: str
+
+class RegisterResponseDto(BaseModel):
+    id: uuid.UUID
+    username: str
+    email: str
+    student_id: str
+    department: str
