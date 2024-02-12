@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from controller.auth_controller import AuthController
 
 from infra.database import create_db_and_tables
 
@@ -25,18 +26,4 @@ app.add_middleware(
 def read_root():
     return "Hello World!"
 
-
-
-class LoginRequestDto(BaseModel):
-    email: str
-    password: str
-
-class LoginResponseDto(BaseModel):
-    success: bool
-
-@app.post('/login')
-async def login(login_body:LoginRequestDto):
-    if login_body.email == 'raspberry-pi@dgist.ac.kr' and login_body.password == 'qwerty1234':
-        return LoginResponseDto(success=True)
-    else:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+app.include_router(AuthController.router(), tags=['Auth'])
