@@ -1,6 +1,6 @@
 
 from fastapi import Depends
-from env import MAIL_SYSTME_ADDRESS
+from env import MAIL_SYSTEM_ADDRESS
 
 from infra.mail import get_system_mail_session
 
@@ -10,4 +10,4 @@ class MailService:
         self.mail_session = sys_mail_session
 
     async def send_mail(self, mail_to, message):
-        self.mail_session.sendmail(MAIL_SYSTME_ADDRESS, mail_to, message)
+        self.mail_session.sendmail(MAIL_SYSTEM_ADDRESS, mail_to, message)

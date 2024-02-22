@@ -1,14 +1,15 @@
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI 
 from controller.auth_controller import AuthController
 
 from infra.database import create_db_and_tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    load_dotenv()
     create_db_and_tables()
     yield
 
