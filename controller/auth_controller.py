@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends, Query
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends
 from fastapi_router_controller import Controller
 
 from schema.dto.auth_dto import LoginRequestDto, LoginResponseDto, RegisterRequestDto, RegisterResponseDto, VerifyRequestDto, VerifyResponseDto
