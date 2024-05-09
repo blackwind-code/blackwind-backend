@@ -7,6 +7,7 @@ from controller.auth_controller import AuthController
 from controller.discord_controller import DiscordController
 from controller.internal.discord_internal_controller import DiscordInternalController
 
+from controller.seminar_controller import SeminarController
 from infra.database import create_db_and_tables
 from controller.websocket.discord_endpoint import setup_discord_endpoint
 
@@ -35,3 +36,4 @@ def read_root():
 app.include_router(AuthController.router(), tags=['Auth'])
 app.include_router(DiscordInternalController.router(), tags=['Discord Internal'])
 app.include_router(DiscordController.router(), tags=['Discord'])
+app.include_router(SeminarController.router(), tags=['Seminar'])
