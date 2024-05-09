@@ -58,7 +58,8 @@ class AuthService:
     
     #로그인에 관한 함수
     async def login(self, email:str, password:str):
-        
+        if not user.verified:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'The email verification of {user.email} has not been completed.')
         hash_and_salt = get_password_hash(password)
 
         statement = select(User).where(User.email == email and User.password == hash_and_salt)
