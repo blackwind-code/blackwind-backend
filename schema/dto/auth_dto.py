@@ -1,3 +1,4 @@
+#밖에 보이면 안되는 정보들과 그렇지 않은 것들을 분류
 import uuid
 from pydantic import BaseModel
 

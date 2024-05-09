@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from controller.auth_controller import AuthController
 
+from controller.seminar_controller import SeminarController
 from infra.database import create_db_and_tables
 
 @asynccontextmanager
@@ -27,3 +28,4 @@ def read_root():
     return "Hello World!"
 
 app.include_router(AuthController.router(), tags=['Auth'])
+app.include_router(SeminarController.router(), tags=['Seminar'])

@@ -10,15 +10,19 @@ from service.mail_service import MailService
 
 
 class AuthService:
+    #메일 서비스와 db 시동걸기
     def __init__(self, db_session: Session = Depends(get_session), mail_service: MailService = Depends(MailService)) -> None:
         self.db_session = db_session
         self.mail_service = mail_service
-
+    
+    #회원가입에 대한 함수
     async def register(self, username: str, email: str, password: str, student_id: int, department: str):
         
         statement = select(User).where(User.email == email or User.student_id == student_id)
         user = self.db_session.exec(statement).one_or_none()
 
+
+        #회원 가입을 할 때, (이메일 인증이 안되어 있나 or 이메일이 이미 등록되어 있나 or 아이다가 이미 등록되어 있나를 평가)
         if user is not None:
             if user.verified:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'The email verification of {user.email} has not been completed.')
@@ -27,12 +31,12 @@ class AuthService:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'The user of {user.email} already exists')
             if user.student_id == student_id:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f'The user of {user.student_id} already exists')
-            
+        
+        #위의 조건을 통과하면 = 새 계정이라면 패스워드를 해쉬해서, db에 등록한다.
 
         hash_and_salt = get_password_hash(password)
 
         # check the department
-
         new_user = User(
             username=username,
             email=email,
@@ -45,12 +49,14 @@ class AuthService:
         self.db_session.commit()
         self.db_session.refresh(new_user)
 
-
+        # 메세지에 실을 내용을 정의하고
         message = generate_verify_email_message(new_user.username, new_user.email, new_user.verify_token)
+        # 메세지를 보낸다
         await self.mail_service.send_mail(new_user.email, message.as_string())
 
         return RegisterResponseDto(**new_user.model_dump())
     
+    #로그인에 관한 함수
     async def login(self, email:str, password:str):
         
         hash_and_salt = get_password_hash(password)
