@@ -1,10 +1,10 @@
 from contextlib import asynccontextmanager
-from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI
 from fastapi_socketio import SocketManager
 from controller.auth_controller import AuthController
+from controller.discord_controller import DiscordController
 from controller.internal.discord_internal_controller import DiscordInternalController
 
 from controller.seminar_controller import SeminarController
@@ -13,7 +13,6 @@ from controller.websocket.discord_endpoint import setup_discord_endpoint
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    load_dotenv()
     create_db_and_tables()
     yield
 
@@ -35,5 +34,6 @@ def read_root():
     return "Hello World!"
 
 app.include_router(AuthController.router(), tags=['Auth'])
-app.include_router(SeminarController.router(), tags=['Seminar'])
 app.include_router(DiscordInternalController.router(), tags=['Discord Internal'])
+app.include_router(DiscordController.router(), tags=['Discord'])
+app.include_router(SeminarController.router(), tags=['Seminar'])
