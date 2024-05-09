@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi_socketio import SocketManager
 from controller.auth_controller import AuthController
-from controller.internal.discord_controller import DiscordController
+from controller.internal.discord_internal_controller import DiscordInternalController
 
 from infra.database import create_db_and_tables
 from controller.websocket.discord_endpoint import setup_discord_endpoint
@@ -34,4 +34,4 @@ def read_root():
     return "Hello World!"
 
 app.include_router(AuthController.router(), tags=['Auth'])
-app.include_router(DiscordController.router(), tags=['Discord Internal'])
+app.include_router(DiscordInternalController.router(), tags=['Discord Internal'])

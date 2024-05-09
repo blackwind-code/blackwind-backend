@@ -12,7 +12,7 @@ controller = Controller(router, openapi_tag={
 
 @controller.use()
 @controller.resource()
-class DiscordController():
+class DiscordInternalController():
     def __init__(self, service = Depends(DiscordService)) -> None:
         self.service = service
 
@@ -22,3 +22,4 @@ class DiscordController():
         response_model=UpsertDiscordUserResonseDto)
     async def upsert(self, body: UpsertDiscordUserRequestDto):
         return await self.service.upsert(body.discord_user_id)
+    
